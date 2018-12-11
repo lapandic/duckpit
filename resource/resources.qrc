@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>speed_meter.svg.png</file>
+        <file>path7914-7.png</file>
+    </qresource>
+</RCC>

@@ -69,12 +69,6 @@
   <exec_depend>duckietown_msgs</exec_depend>
   <exec_depend>roscpp</exec_depend>
 
-  <run_depend>duckietown_msgs</run_depend>
-  <run_depend>roscpp</run_depend>
-  <run_depend>rospy</run_depend>
-  <run_depend>rqt_gui</run_depend>
-  <run_depend>rqt_gui_py</run_depend>
-
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>
