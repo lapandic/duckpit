@@ -1,0 +1,20 @@
+<library path="src">
+  <class name="DuckPit" type="rqt_duckpit.my_module.DuckPit" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      DuckPit is a first person GUI visualization of a cockpit for Duckiebots.
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <label>DuckPit</label>
+      <icon type="file">duckie_icon.png</icon>
+      <statustip>DuckPit</statustip>
+    </qtgui>
+  </class>
+</library>
