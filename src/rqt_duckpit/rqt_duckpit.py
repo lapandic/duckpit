@@ -7,7 +7,7 @@ import duckietown_msgs.msg
 
 from qt_gui.plugin import Plugin
 from python_qt_binding import loadUi
-from python_qt_binding.QtWidgets import QWidget
+from python_qt_binding.QtWidgets import QWidget, QLabel, QSlider
 
 class RQTDuckpit(Plugin):
 
@@ -46,13 +46,54 @@ class RQTDuckpit(Plugin):
         # Add widget to the user interface
         context.add_widget(self._widget)
 
-        self.veh = rospy.get_param('/veh')
+        self.veh = rospy.get_param('/veh',"megabot08")
 
         # Subscribers
-        self.topic_name = '/' + self.veh + '//plan_request'
-        self.subs = rospy.Subscriber(self.topic_name, sensor_msgs.msg.CompressedImage, self.receive_img, queue_size=1)
+        # self.camera_topic = '/' + self.veh + '/camera_node/image/compressed'
+        # self.sub_camera = rospy.Subscriber(self.camera_topic, sensor_msgs.msg.CompressedImage, self.cbImage, queue_size=1)
+
+        self.steps_ahead = 5
+        self.cmd_topics = []
+        self.cmd_topics.append('/' + self.veh + '/inverse_kinematics_node/car_cmd')
+        self.cmd_node_name = 'cnn_node'
+        for i in range(1,self.steps_ahead):
+             self.cmd_topics.append('/' + self.veh + '/'+ self.cmd_node_name +'/car_cmd_'+str(i+1))
+
+        self.sub_cmds = dict()
+        for i in range(0, self.steps_ahead):
+            self.sub_cmds[i] = rospy.Subscriber(self.cmd_topics[i], duckietown_msgs.msg.Twist2DStamped, self.cbCarCmds, callback_args=i+1)
+
+        self._widget.h_slider.setValue(0)
+        self._widget.h_slider_2.setValue(0)
+        self._widget.h_slider_3.setValue(0)
+        self._widget.h_slider_4.setValue(0)
+        self._widget.h_slider_5.setValue(0)
+
+        self._widget.label_val.setText("0")
+        self._widget.label_val_2.setText("0")
+        self._widget.label_val_3.setText("0")
+        self._widget.label_val_4.setText("0")
+        self._widget.label_val_5.setText("0")
 
 
+        
+
+    def cbCarCmds(self, msg,num):
+        if num == 1:
+            self._widget.h_slider.setValue(msg.omega)
+            self._widget.label_val.setText(str(msg.omega))
+        elif num == 2:
+            self._widget.h_slider_2.setValue(msg.omega)
+            self._widget.label_val_2.setText(str(msg.omega))
+        elif num == 3:
+            self._widget.h_slider_3.setValue(msg.omega)
+            self._widget.label_val_3.setText(str(msg.omega))
+        elif num == 4:
+            self._widget.h_slider_4.setValue(msg.omega)
+            self._widget.label_val_4.setText(str(msg.omega))
+        elif num == 5:
+            self._widget.h_slider_5.setValue(msg.omega)
+            self._widget.label_val_5.setText(str(msg.omega))
 
     def shutdown_plugin(self):
         # TODO unregister all publishers here
